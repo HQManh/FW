@@ -16,4 +16,23 @@ public class CanvasController : MonoBehaviour
     {
         StageController.Instance.Restart();
     }
+
+    public void OnMusicButton()
+    {
+        if (GlobalController.IsMusicOn)
+        {
+            GlobalController.IsMusicOn = false;
+            PlayerPrefs.SetInt("IsMusicOn", 0);
+        }
+    }
+
+    public void OnSoundButton()
+    {
+        if (GlobalController.IsSoundOn)
+        {
+            GlobalController.IsSoundOn = false;
+            PlayerPrefs.SetInt("IsSoundOn", 0);
+        }
+    }
+
 }

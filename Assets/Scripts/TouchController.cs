@@ -11,11 +11,19 @@ public class TouchController : Singleton<TouchController>,
     IBeginDragHandler,
     IEndDragHandler
 {
+    [SerializeField] Transform direction;
     [SerializeField] Rigidbody weapon;
+    [SerializeField] float power;
     Vector2 startPoint;
     Vector2 endPoint;
     [SerializeField] float maxDis;
     Vector2 dis;
+    float fixDT;
+
+    private void Start()
+    {
+        fixDT = Time.fixedDeltaTime;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -23,12 +31,28 @@ public class TouchController : Singleton<TouchController>,
 
     public void OnDrag(PointerEventData eventData)
     {
-        endPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        direction.gameObject.SetActive(true);
+        direction.position = weapon.position;
+        Time.timeScale = 0.1f;
+        Time.fixedDeltaTime *= 0.1f;
+        endPoint = Input.mousePosition;
         dis = endPoint - startPoint;
+        var te = Vector2.SignedAngle(Vector2.right, dis);
+        direction.rotation = Quaternion.Euler(0f, 0f, te);
+        var t = dis.magnitude;
+        if(t > maxDis)
+        {
+            direction.localScale = Vector3.one;
+        }
+        else
+        {
+            direction.localScale = Vector3.one / maxDis * t;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -38,12 +62,15 @@ public class TouchController : Singleton<TouchController>,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        startPoint = Input.mousePosition;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        endPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        direction.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = fixDT;
+        endPoint = Input.mousePosition;
         dis = endPoint - startPoint;
         float t = dis.magnitude;
         if (t > maxDis)
@@ -54,6 +81,6 @@ public class TouchController : Singleton<TouchController>,
         weapon.rotation = Quaternion.Euler(0f, 0f, te);
         weapon.velocity = Vector3.zero;
         weapon.angularVelocity = Vector3.zero;
-        weapon.AddForce(dis*500);
+        weapon.AddForce(dis*power);
     }
 }

@@ -16,28 +16,30 @@ public class Enemy : Humanoid
     [SerializeField] float speed;
     Vector3 startPoint;
 
-
     private void Awake()
     {
-        if(isMove)
-        {
-            animator.SetTrigger("IsMove");
-            Moving();
-        }
+        startPoint = transform.position;
     }
-
 
     private void Start()
     {
-        startPoint = transform.position;
+        if (isMove)
+        {
+            animator.SetTrigger("IsMove");
+            animator.Play("Moving");
+            Moving();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Weapon"))
         {
-            isDead = true;
-            SwitchMode(true);
+            if (!isDead)
+            {
+                isDead = true;
+                SwitchMode(true);
+            }
         }  
     }
 
@@ -65,6 +67,7 @@ public class Enemy : Humanoid
             skinnedMesh.material = deadM;
         }
         LeanTween.cancel(gameObject);
+        EnemyTracking.Instance.OnDeath();
     }
 
     void Moving()
@@ -75,10 +78,10 @@ public class Enemy : Humanoid
             LeanTween.move(gameObject, Vector3.right * line.y + startPoint, 5f).setSpeed(speed).setOnComplete(() =>
             {
                 gameObject.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
-                Moving();
+                    Moving();
+                });
             });
-        });
-    }
+        }
 
     private void OnDrawGizmosSelected()
     {
