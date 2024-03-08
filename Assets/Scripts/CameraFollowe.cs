@@ -38,8 +38,12 @@ public class CameraFollowe : MonoBehaviour
     {
         var temp = GameObject.FindGameObjectsWithTag("RetrictCam");
         xLimit = temp[0].transform.position;
-        xLimit = new(xLimit.x +ratio, xLimit.y + size);
         yLimit = temp[1].transform.position;
+        if(xLimit.x > yLimit.x)
+        {
+            (xLimit,yLimit) = (yLimit,xLimit);
+        }
+        xLimit = new(xLimit.x + ratio, xLimit.y + size);
         yLimit = new(yLimit.x -ratio,yLimit.y - size);
         if (xLimit.x > yLimit.x)
         {
