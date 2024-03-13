@@ -1494,6 +1494,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDead: 0
+  kill: {fileID: 8300000, guid: ec6f78b9c45197b4f9daf0dfac8568af, type: 3}
+  particleSystem: {fileID: 6245576981635255461, guid: 30e66b4bebe3d71438c2eeb11e525daf, type: 3}
   isMove: 0
   animator: {fileID: 7295316490603043250}
   rigidbodies:

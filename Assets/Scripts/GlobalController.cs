@@ -16,6 +16,7 @@ public class GlobalController : MonoBehaviour
     public static bool IsSoundOn { get; set; }
     public static bool IsMusicOn { get; set; }
 
+    public bool ForTesting = false;
 
     private void Awake()
     {
@@ -29,10 +30,6 @@ public class GlobalController : MonoBehaviour
         if(t==1)
         {
             IsMusicOn = true;
-        } else IsMusicOn = false;
+        } else IsMusicOn = false;   
     }
-
-
- 
-  
 }

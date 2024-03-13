@@ -32,5 +32,9 @@ public class EnemyTracking : MonoBehaviour
     {
         enemyImages[^numOfEnemy].sprite = deathUI;
         numOfEnemy --;
+        if(numOfEnemy == 0)
+        {
+            CanvasController.Instance.EndPlay();
+        }
     }
 }

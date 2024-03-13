@@ -16,6 +16,7 @@ public class TouchController : Singleton<TouchController>,
     [SerializeField] float power;
     Vector2 startPoint;
     Vector2 endPoint;
+    bool isStart = false;
     [SerializeField] float maxDis;
     Vector2 dis;
     float fixDT;
@@ -31,6 +32,7 @@ public class TouchController : Singleton<TouchController>,
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!isStart) return;
         direction.gameObject.SetActive(true);
         direction.position = weapon.position;
         Time.timeScale = 0.1f;
@@ -57,16 +59,22 @@ public class TouchController : Singleton<TouchController>,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-
+        if (!isStart)
+        {
+            isStart = true;
+            CanvasController.Instance.StartPlay();
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!isStart) return;
         startPoint = Input.mousePosition;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!isStart) return;
         direction.gameObject.SetActive(false);
         Time.timeScale = 1f;
         Time.fixedDeltaTime = fixDT;
@@ -74,7 +82,7 @@ public class TouchController : Singleton<TouchController>,
         dis = endPoint - startPoint;
         float t = dis.magnitude;
         if (t > maxDis)
-        {
+    {
             dis = dis / t * maxDis;
         }
         var te = Vector2.SignedAngle(Vector2.up, dis);

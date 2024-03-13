@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : Humanoid
 {
+    [SerializeField] AudioClip kill;
+    [SerializeField] ParticleSystem particleSystem;
     [SerializeField] bool isMove;
     [SerializeField] Animator animator;
     [SerializeField] List<Rigidbody> rigidbodies;
@@ -37,6 +39,9 @@ public class Enemy : Humanoid
         {
             if (!isDead)
             {
+                Vector3 pos = collision.contacts[0].point;
+                SoundManager.Instance.PlaySfx(kill);
+                Instantiate(particleSystem, pos,Quaternion.identity);
                 isDead = true;
                 SwitchMode(true);
             }
